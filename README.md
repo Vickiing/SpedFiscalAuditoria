@@ -1,66 +1,66 @@
-# Sped Fiscal Auditoria Dominio
+# Sped Fiscal Auditoria Domínio
 
 ## Projeto
-Este projeto modela o dominio de Auditoria Fiscal em C#/.NET, propondo apoio a um processo de conferencia de documentos fiscais para identificar inconsistencias, validar campos relevantes e organizar regras de negocio de forma auditavel. Em termos tecnicos, aplica Orientacao a Objetos, Domain-Driven Design, SOLID, GRASP e testes unitarios para estruturar essas regras de forma clara, isolada e consistente.
+Este projeto modela o domínio de Auditoria Fiscal em C#/.NET, propondo apoio a um processo de conferência de documentos fiscais para identificar inconsistências, validar campos relevantes e organizar regras de negócio de forma auditável. Em termos técnicos, aplica Orientação a Objetos, Domain-Driven Design, SOLID, GRASP e testes unitários para estruturar essas regras de forma clara, isolada e consistente.
 
-## Modelagem do Dominio
+## Modelagem do Domínio
 
-![Modelagem do dominio de auditoria fiscal](./docs/modelagem_dominio_auditoria_fiscal.png)
+![Modelagem do domínio de auditoria fiscal](./docs/modelagem_dominio_auditoria_fiscal.png)
 
-## Problema E Solucao
+## Problema e Solução
 
-O problema tratado e a necessidade de conferir documentos fiscais de forma consistente, reduzindo erros de lancamento, divergencias de total e inconsistencias em dados basicos e NCM. A solucao desenvolvida e um dominio de auditoria fiscal que valida o documento, calcula o total apurado, compara com o total informado e devolve um resultado aprovado ou reprovado com mensagens de divergencia.
+O problema tratado é a necessidade de conferir documentos fiscais de forma consistente, reduzindo erros de lançamento, divergências de total e inconsistências em dados básicos e NCM. A solução desenvolvida é um domínio de auditoria fiscal que valida o documento, calcula o total apurado, compara com o total informado e devolve um resultado aprovado ou reprovado com mensagens de divergência.
 
 ### Problema a ser resolvido
-Garantir a auditoria consistente de documentos fiscais e apoiar a conferencia fiscal antes do fechamento contabil e tributario, reduzindo erros manuais, retrabalho e inconsistencias de lancamento. Para isso, o dominio valida:
+Garantir a auditoria consistente de documentos fiscais e apoiar a conferência fiscal antes do fechamento contábil e tributário, reduzindo erros manuais, retrabalho e inconsistências de lançamento. Para isso, o domínio valida:
 - dados basicos do documento;
 - itens e seus totais;
 - NCM dos itens;
 - divergencia entre total informado e total apurado;
 - regras de auditoria isoladas em servicos e factories;
-- integracao com dados externos sem contaminar o dominio.
+- integração com dados externos sem contaminar o domínio.
 
 ## Escopo
 
 ### Interno
 - `DocumentoFiscal` como raiz do agregado.
-- `ItemDocumentoFiscal` e `Ncm` como parte do modelo interno de dominio.
+- `ItemDocumentoFiscal` e `Ncm` como parte do modelo interno de domínio.
 - `AuditorFiscal` como coordenador das regras de auditoria.
 - `FabricaResultadoAuditoriaFiscal` como construtor dos resultados.
 - `RegraAuditoriaDocumento`, `RegraItensDocumento` e `RegraTotalDocumento` como regras internas.
-- `AdaptadorDocumentoFiscalExterno` como porta de entrada para converter o formato externo para o dominio.
+- `AdaptadorDocumentoFiscalExterno` como porta de entrada para converter o formato externo para o domínio.
 
 ### Externo
 - Sistemas que fornecem `DocumentoFiscalExterno`.
-- Pessoas que consomem o resultado da auditoria, como analistas fiscais ou contabeis.
-- Repositorio de documentos fiscais, quando houver persistencia fora do dominio.
+- Pessoas que consomem o resultado da auditoria, como analistas fiscais ou contábeis.
+- Repositório de documentos fiscais, quando houver persistência fora do domínio.
 
-## Usuarios E Interfaces
+## Usuários e Interfaces
 
-- Analista fiscal ou contabil: consulta o resultado da auditoria e trata divergencias.
-- Sistema externo de integracao: envia documentos no formato `DocumentoFiscalExterno`.
-- Camada de persistencia: interage com `IDocumentoFiscalRepositorio` quando o documento precisa ser armazenado ou recuperado.
+- Analista fiscal ou contábil: consulta o resultado da auditoria e trata divergências.
+- Sistema externo de integração: envia documentos no formato `DocumentoFiscalExterno`.
+- Camada de persistência: interage com `IDocumentoFiscalRepositorio` quando o documento precisa ser armazenado ou recuperado.
 
-## Regras De Negocio
+## Regras de Negócio
 
-- O numero do documento deve ser informado.
+- O número do documento deve ser informado.
 - O emitente deve ser informado.
 - O documento pode ser composto por zero ou mais itens.
-- Cada item deve ter descricao, NCM valido, quantidade maior que zero e valor unitario nao negativo.
-- O NCM deve conter exatamente 8 digitos numericos.
+- Cada item deve ter descrição, NCM válido, quantidade maior que zero e valor unitário não negativo.
+- O NCM deve conter exatamente 8 dígitos numéricos.
 - O total apurado e a soma dos totais dos itens.
-- O documento e reprovado quando o total informado difere do total apurado.
-- O documento e reprovado quando nao possui itens.
+- O documento é reprovado quando o total informado difere do total apurado.
+- O documento é reprovado quando não possui itens.
 
 ## Conceitos Observados
 - Ubiquitous Language: DocumentoFiscal, ItemDocumentoFiscal, Ncm, AuditorFiscal, ResultadoAuditoriaFiscal.
 - Entidade e ObjetoDeValor: DocumentoFiscal como raiz do agregado, ItemDocumentoFiscal e Ncm como objetos sem identidade.
-- Repository: abstracao em IDocumentoFiscalRepositorio.
-- Aggregate, Bounded Context e Servico de dominio: DocumentoFiscal como agregado, contexto de Auditoria Fiscal e AuditorFiscal como servico de dominio.
-- Servico de dominio e Factory: AuditorFiscal executa a regra; FabricaResultadoAuditoriaFiscal monta o resultado.
+- Repository: abstração em IDocumentoFiscalRepositorio.
+- Aggregate, Bounded Context e Servico de domínio: DocumentoFiscal como agregado, contexto de Auditoria Fiscal e AuditorFiscal como servico de domínio.
+- Servico de domínio e Factory: AuditorFiscal executa a regra; FabricaResultadoAuditoriaFiscal monta o resultado.
 - Anti-Corruption Layer e Context Map: AdaptadorDocumentoFiscalExterno converte DocumentoFiscalExterno para o modelo interno.
 
-Projeto de dominio em C#/.NET com foco em DDD e testes unitarios, sem camada de aplicacao.
+Projeto de domínio em C#/.NET com foco em DDD e testes unitários, sem camada de aplicação.
 
 ## Como validar
 
